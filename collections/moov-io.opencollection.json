@@ -1,0 +1,236 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Moov API",
+    "version": "v2026.04.00"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{accessToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Accounts", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create an account.", "type": "http" },
+          "http": { "method": "POST", "url": "https://api.moov.io/accounts", "body": { "type": "json", "data": "{\n  \"accountType\": \"business\"\n}" } },
+          "docs": "Create a Moov account for a business or individual."
+        },
+        {
+          "info": { "name": "List accounts.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts" },
+          "docs": "List accounts connected to your platform."
+        },
+        {
+          "info": { "name": "Retrieve an account.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }] },
+          "docs": "Retrieve a single account by ID."
+        },
+        {
+          "info": { "name": "Update an account.", "type": "http" },
+          "http": { "method": "PATCH", "url": "https://api.moov.io/accounts/:accountID", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }], "body": { "type": "json", "data": "{}" } },
+          "docs": "Update an account's profile."
+        },
+        {
+          "info": { "name": "Disconnect an account.", "type": "http" },
+          "http": { "method": "DELETE", "url": "https://api.moov.io/accounts/:accountID", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }] },
+          "docs": "Disconnect an account from your platform."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Representatives", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Add a representative.", "type": "http" },
+          "http": { "method": "POST", "url": "https://api.moov.io/accounts/:accountID/representatives", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }], "body": { "type": "json", "data": "{}" } },
+          "docs": "Add a beneficial owner or controller to a business account."
+        },
+        {
+          "info": { "name": "List representatives.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID/representatives", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }] },
+          "docs": "List the representatives on an account."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Capabilities", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Request capabilities.", "type": "http" },
+          "http": { "method": "POST", "url": "https://api.moov.io/accounts/:accountID/capabilities", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }], "body": { "type": "json", "data": "{\n  \"capabilities\": [\"transfers\", \"wallet\"]\n}" } },
+          "docs": "Request capabilities that enable money movement on an account."
+        },
+        {
+          "info": { "name": "List capabilities.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID/capabilities", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }] },
+          "docs": "List the capabilities enabled on an account."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Bank Accounts", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Link a bank account.", "type": "http" },
+          "http": { "method": "POST", "url": "https://api.moov.io/accounts/:accountID/bank-accounts", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }], "body": { "type": "json", "data": "{\n  \"account\": {\n    \"accountNumber\": \"0004321567000\",\n    \"routingNumber\": \"123456789\",\n    \"bankAccountType\": \"checking\"\n  }\n}" } },
+          "docs": "Link a bank account as a funding source."
+        },
+        {
+          "info": { "name": "List bank accounts.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID/bank-accounts", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }] },
+          "docs": "List the bank accounts linked to an account."
+        },
+        {
+          "info": { "name": "Initiate micro-deposits.", "type": "http" },
+          "http": { "method": "POST", "url": "https://api.moov.io/accounts/:accountID/bank-accounts/:bankAccountID/micro-deposits", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }, { "name": "bankAccountID", "value": "", "type": "path", "description": "The bank account identifier." }] },
+          "docs": "Initiate micro-deposits to verify a bank account."
+        },
+        {
+          "info": { "name": "Complete micro-deposits.", "type": "http" },
+          "http": { "method": "PUT", "url": "https://api.moov.io/accounts/:accountID/bank-accounts/:bankAccountID/micro-deposits", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }, { "name": "bankAccountID", "value": "", "type": "path", "description": "The bank account identifier." }], "body": { "type": "json", "data": "{\n  \"amounts\": [12, 7]\n}" } },
+          "docs": "Complete micro-deposit verification with the deposited amounts."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Cards", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Link a card.", "type": "http" },
+          "http": { "method": "POST", "url": "https://api.moov.io/accounts/:accountID/cards", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }], "body": { "type": "json", "data": "{\n  \"cardNumber\": \"4111111111111111\",\n  \"cardCvv\": \"123\",\n  \"expiration\": { \"month\": \"12\", \"year\": \"28\" }\n}" } },
+          "docs": "Link a payment card as a funding source."
+        },
+        {
+          "info": { "name": "List cards.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID/cards", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }] },
+          "docs": "List the cards linked to an account."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Wallets", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List wallets.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID/wallets", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }] },
+          "docs": "List an account's stored-balance wallets."
+        },
+        {
+          "info": { "name": "List wallet transactions.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID/wallets/:walletID/transactions", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }, { "name": "walletID", "value": "", "type": "path", "description": "The wallet identifier." }] },
+          "docs": "List the ledgered transactions for a wallet."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Payment Methods", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List payment methods.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID/payment-methods", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }] },
+          "docs": "List the payment methods (funding source + rail combinations) on an account."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Transfers", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a transfer.", "type": "http" },
+          "http": { "method": "POST", "url": "https://api.moov.io/accounts/:accountID/transfers", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }], "body": { "type": "json", "data": "{\n  \"source\": { \"paymentMethodID\": \"\" },\n  \"destination\": { \"paymentMethodID\": \"\" },\n  \"amount\": { \"currency\": \"USD\", \"value\": 1000 }\n}" } },
+          "docs": "Create a transfer between a source and destination payment method."
+        },
+        {
+          "info": { "name": "List transfers.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID/transfers", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }] },
+          "docs": "List transfers for an account."
+        },
+        {
+          "info": { "name": "Retrieve a transfer.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID/transfers/:transferID", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }, { "name": "transferID", "value": "", "type": "path", "description": "The transfer identifier." }] },
+          "docs": "Retrieve a single transfer by ID."
+        },
+        {
+          "info": { "name": "Retrieve transfer options.", "type": "http" },
+          "http": { "method": "POST", "url": "https://api.moov.io/accounts/:accountID/transfer-options", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }], "body": { "type": "json", "data": "{\n  \"amount\": { \"currency\": \"USD\", \"value\": 1000 }\n}" } },
+          "docs": "Retrieve the available payment method options for a transfer."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Refunds", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a refund.", "type": "http" },
+          "http": { "method": "POST", "url": "https://api.moov.io/accounts/:accountID/transfers/:transferID/refunds", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }, { "name": "transferID", "value": "", "type": "path", "description": "The transfer identifier." }], "body": { "type": "json", "data": "{\n  \"amount\": { \"currency\": \"USD\", \"value\": 1000 }\n}" } },
+          "docs": "Create a refund on a completed card transfer."
+        },
+        {
+          "info": { "name": "List refunds.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID/transfers/:transferID/refunds", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }, { "name": "transferID", "value": "", "type": "path", "description": "The transfer identifier." }] },
+          "docs": "List the refunds on a transfer."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Sweeps", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List sweep configs.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID/sweep-configs", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }] },
+          "docs": "List the sweep configurations on an account."
+        },
+        {
+          "info": { "name": "List sweeps for a wallet.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID/wallets/:walletID/sweeps", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }, { "name": "walletID", "value": "", "type": "path", "description": "The wallet identifier." }] },
+          "docs": "List the sweeps produced for a wallet."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Disputes", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List disputes.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/accounts/:accountID/disputes", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }] },
+          "docs": "List the card disputes on an account."
+        },
+        {
+          "info": { "name": "Accept a dispute.", "type": "http" },
+          "http": { "method": "POST", "url": "https://api.moov.io/accounts/:accountID/disputes/:disputeID/accept", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }, { "name": "disputeID", "value": "", "type": "path", "description": "The dispute identifier." }] },
+          "docs": "Accept a dispute rather than contesting it."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Card Issuing", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a spending card.", "type": "http" },
+          "http": { "method": "POST", "url": "https://api.moov.io/issuing/:accountID/cards", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }], "body": { "type": "json", "data": "{\n  \"fundingWalletID\": \"\",\n  \"formFactor\": \"virtual\"\n}" } },
+          "docs": "Issue a virtual spending card backed by a wallet."
+        },
+        {
+          "info": { "name": "List authorizations.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/issuing/:accountID/authorizations", "params": [{ "name": "accountID", "value": "", "type": "path", "description": "The Moov account identifier." }] },
+          "docs": "List authorizations generated by issued cards."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Institutions", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Look up institutions.", "type": "http" },
+          "http": { "method": "GET", "url": "https://api.moov.io/institutions?routingNumber=123456789", "params": [{ "name": "routingNumber", "value": "123456789", "type": "query", "description": "The ABA routing number to look up." }] },
+          "docs": "Validate a financial institution and check available rails for a routing number."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,176 @@
+aid: moov-io
+name: Moov
+review:
+  question: Does Moov expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-02'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. Moov's public API surface (api.moov.io)
+    is request/response REST over HTTPS. Moov delivers asynchronous event
+    notifications (transfer status changes, account/capability updates, dispute
+    events, etc.) via webhooks - server-to-endpoint HTTPS POST callbacks with an
+    HMAC SHA-512 signature - not via a WebSocket or SSE stream on Moov's own API.
+    Webhooks are a one-directional callback into the customer's own endpoint and
+    there is no documented client-facing streaming transport on api.moov.io to
+    model, so no AsyncAPI spec was created.
+findings:
+  summary: |
+    Moov does not publish a documented public WebSocket API. The Moov platform
+    exposes a single REST API at https://api.moov.io that is based on REST
+    principles, returns JSON, and uses standard HTTP response codes.
+    Authentication is via OAuth 2.0 access tokens (Bearer). Asynchronous state
+    changes are communicated through webhooks: the customer registers an HTTPS
+    endpoint and Moov POSTs signed event payloads to it (HMAC SHA-512
+    signature), treating a delivery as failed if it does not receive a 2xx
+    within 5 seconds and retrying for up to 24 hours. There is no realtime,
+    bidirectional, or streaming WebSocket (ws:// or wss://) or Server-Sent
+    Events endpoint documented anywhere on Moov's own API as of the review date.
+  openSource: |
+    Moov maintains a well-known open-source GitHub organization at
+    github.com/moov-io containing Go libraries and Dockerized HTTP servers for
+    banking and payments file formats - notably ACH (github.com/moov-io/ach),
+    wire, IAT, and related standards. These are self-hostable OSS tools with
+    their own OpenAPI specs (e.g. moov-io/ach/openapi.yaml) and are distinct
+    from the commercial hosted money-movement API at api.moov.io that this
+    catalog documents. The commercial platform SDKs live under the
+    github.com/moovfinancial organization and are generated from Moov's
+    OpenAPI spec.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.moov.io
+      documented: true
+      note: The entire Moov money-movement API - accounts, sources, transfers, disputes, issuing - is request/response REST over HTTPS.
+    - protocol: Webhook
+      scheme: https
+      documented: true
+      note: Event notifications are delivered as HTTPS POST callbacks to a customer endpoint, signed with an HMAC SHA-512 signature. Server-to-endpoint HTTP, not WebSocket.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented anywhere in Moov's API reference or developer guides as of the review date.
+  endpointsConfirmedRest:
+    - POST   https://api.moov.io/accounts
+    - GET    https://api.moov.io/accounts
+    - GET    https://api.moov.io/accounts/{accountID}
+    - PATCH  https://api.moov.io/accounts/{accountID}
+    - DELETE https://api.moov.io/accounts/{accountID}
+    - POST   https://api.moov.io/accounts/{accountID}/connections
+    - GET    https://api.moov.io/accounts/{accountID}/connected-accounts
+    - GET    https://api.moov.io/tos-token
+    - POST   https://api.moov.io/accounts/{accountID}/representatives
+    - GET    https://api.moov.io/accounts/{accountID}/representatives
+    - GET    https://api.moov.io/accounts/{accountID}/representatives/{representativeID}
+    - PATCH  https://api.moov.io/accounts/{accountID}/representatives/{representativeID}
+    - DELETE https://api.moov.io/accounts/{accountID}/representatives/{representativeID}
+    - POST   https://api.moov.io/accounts/{accountID}/capabilities
+    - GET    https://api.moov.io/accounts/{accountID}/capabilities
+    - GET    https://api.moov.io/accounts/{accountID}/capabilities/{capabilityID}
+    - DELETE https://api.moov.io/accounts/{accountID}/capabilities/{capabilityID}
+    - POST   https://api.moov.io/accounts/{accountID}/bank-accounts
+    - GET    https://api.moov.io/accounts/{accountID}/bank-accounts
+    - GET    https://api.moov.io/accounts/{accountID}/bank-accounts/{bankAccountID}
+    - DELETE https://api.moov.io/accounts/{accountID}/bank-accounts/{bankAccountID}
+    - POST   https://api.moov.io/accounts/{accountID}/bank-accounts/{bankAccountID}/verify
+    - PUT    https://api.moov.io/accounts/{accountID}/bank-accounts/{bankAccountID}/verify
+    - GET    https://api.moov.io/accounts/{accountID}/bank-accounts/{bankAccountID}/verify
+    - POST   https://api.moov.io/accounts/{accountID}/bank-accounts/{bankAccountID}/micro-deposits
+    - PUT    https://api.moov.io/accounts/{accountID}/bank-accounts/{bankAccountID}/micro-deposits
+    - POST   https://api.moov.io/accounts/{accountID}/cards
+    - GET    https://api.moov.io/accounts/{accountID}/cards
+    - GET    https://api.moov.io/accounts/{accountID}/cards/{cardID}
+    - PATCH  https://api.moov.io/accounts/{accountID}/cards/{cardID}
+    - DELETE https://api.moov.io/accounts/{accountID}/cards/{cardID}
+    - POST   https://api.moov.io/accounts/{accountID}/wallets
+    - GET    https://api.moov.io/accounts/{accountID}/wallets
+    - GET    https://api.moov.io/accounts/{accountID}/wallets/{walletID}
+    - PATCH  https://api.moov.io/accounts/{accountID}/wallets/{walletID}
+    - GET    https://api.moov.io/accounts/{accountID}/wallets/{walletID}/transactions
+    - GET    https://api.moov.io/accounts/{accountID}/wallets/{walletID}/transactions/{transactionID}
+    - GET    https://api.moov.io/accounts/{accountID}/adjustments
+    - GET    https://api.moov.io/accounts/{accountID}/adjustments/{adjustmentID}
+    - GET    https://api.moov.io/accounts/{accountID}/payment-methods
+    - GET    https://api.moov.io/accounts/{accountID}/payment-methods/{paymentMethodID}
+    - POST   https://api.moov.io/accounts/{accountID}/transfers
+    - GET    https://api.moov.io/accounts/{accountID}/transfers
+    - GET    https://api.moov.io/accounts/{accountID}/transfers/{transferID}
+    - PATCH  https://api.moov.io/accounts/{accountID}/transfers/{transferID}
+    - POST   https://api.moov.io/accounts/{accountID}/transfer-options
+    - POST   https://api.moov.io/accounts/{accountID}/transfer-config
+    - GET    https://api.moov.io/accounts/{accountID}/transfer-config
+    - PUT    https://api.moov.io/accounts/{accountID}/transfer-config
+    - POST   https://api.moov.io/accounts/{accountID}/transfers/{transferID}/cancellations
+    - GET    https://api.moov.io/accounts/{accountID}/transfers/{transferID}/cancellations/{cancellationID}
+    - POST   https://api.moov.io/accounts/{accountID}/transfers/{transferID}/refunds
+    - GET    https://api.moov.io/accounts/{accountID}/transfers/{transferID}/refunds
+    - GET    https://api.moov.io/accounts/{accountID}/transfers/{transferID}/refunds/{refundID}
+    - POST   https://api.moov.io/accounts/{accountID}/transfers/{transferID}/reversals
+    - POST   https://api.moov.io/accounts/{accountID}/sweep-configs
+    - GET    https://api.moov.io/accounts/{accountID}/sweep-configs
+    - GET    https://api.moov.io/accounts/{accountID}/sweep-configs/{sweepConfigID}
+    - PATCH  https://api.moov.io/accounts/{accountID}/sweep-configs/{sweepConfigID}
+    - GET    https://api.moov.io/accounts/{accountID}/wallets/{walletID}/sweeps
+    - GET    https://api.moov.io/accounts/{accountID}/wallets/{walletID}/sweeps/{sweepID}
+    - GET    https://api.moov.io/accounts/{accountID}/disputes
+    - GET    https://api.moov.io/accounts/{accountID}/disputes/{disputeID}
+    - POST   https://api.moov.io/accounts/{accountID}/disputes/{disputeID}/accept
+    - POST   https://api.moov.io/accounts/{accountID}/disputes/{disputeID}/evidence-file
+    - POST   https://api.moov.io/accounts/{accountID}/disputes/{disputeID}/evidence-text
+    - POST   https://api.moov.io/accounts/{accountID}/disputes/{disputeID}/evidence/submit
+    - GET    https://api.moov.io/accounts/{accountID}/disputes/{disputeID}/evidence
+    - GET    https://api.moov.io/accounts/{accountID}/disputes/{disputeID}/evidence/{evidenceID}
+    - PATCH  https://api.moov.io/accounts/{accountID}/disputes/{disputeID}/evidence/{evidenceID}
+    - DELETE https://api.moov.io/accounts/{accountID}/disputes/{disputeID}/evidence/{evidenceID}
+    - GET    https://api.moov.io/accounts/{accountID}/disputes/{disputeID}/evidence/{evidenceID}/data
+    - POST   https://api.moov.io/issuing/{accountID}/cards
+    - GET    https://api.moov.io/issuing/{accountID}/cards
+    - GET    https://api.moov.io/issuing/{accountID}/cards/{issuedCardID}
+    - PATCH  https://api.moov.io/issuing/{accountID}/cards/{issuedCardID}
+    - GET    https://api.moov.io/issuing/{accountID}/cards/{issuedCardID}/details
+    - GET    https://api.moov.io/issuing/{accountID}/authorizations
+    - GET    https://api.moov.io/issuing/{accountID}/authorizations/{authorizationID}
+    - GET    https://api.moov.io/issuing/{accountID}/authorizations/{authorizationID}/events
+    - GET    https://api.moov.io/issuing/{accountID}/card-transactions
+    - GET    https://api.moov.io/issuing/{accountID}/card-transactions/{cardTransactionID}
+    - GET    https://api.moov.io/institutions
+  endpointsModeled:
+    - PUT    https://api.moov.io/accounts/{accountID}/underwriting
+    - GET    https://api.moov.io/accounts/{accountID}/underwriting
+  endpointsModeledNote: |
+    Underwriting endpoints are represented in the OpenAPI on the modeled
+    (unconfirmed exact-path) basis - underwriting is a documented Moov Accounts
+    resource but its exact HTTP verbs/paths were not confirmed from a public
+    reference page during this review. Scheduling is a documented Money Movement
+    resource but was likewise left out of the confirmed endpoint list pending a
+    reference page. All other endpoints above were confirmed against Moov's
+    public API reference at docs.moov.io/api.
+sources:
+  - url: https://docs.moov.io/api/
+    type: APIReference
+    note: API overview - base URL https://api.moov.io, REST/JSON, versioned; canonical OpenAPI spec published via Speakeasy.
+  - url: https://docs.moov.io/api/money-movement/transfers/
+    type: APIReference
+    note: Transfers, transfer-config, transfer-options, cancellations. All REST.
+  - url: https://docs.moov.io/api/sources/bank-accounts/
+    type: APIReference
+    note: Bank account CRUD plus verify and micro-deposits.
+  - url: https://docs.moov.io/api/money-movement/disputes/
+    type: APIReference
+    note: Disputes and evidence endpoints.
+  - url: https://docs.moov.io/guides/webhooks/
+    type: Documentation
+    note: Event delivery is via webhooks (HTTPS POST, HMAC SHA-512 signature, 5s timeout, 24h retry). No WebSocket.
+  - url: https://github.com/moov-io/ach
+    type: SourceCode
+    note: Open-source ACH file-format library and HTTP server; distinct from the commercial api.moov.io platform.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists on Moov's own API. Moov's public API is
+    request/response REST (api.moov.io) and its asynchronous notifications are
+    delivered by outbound webhooks to a customer-hosted HTTPS endpoint. Because
+    there is no server-push streaming transport (WebSocket or SSE) on Moov's own
+    API to model, no AsyncAPI document was created.

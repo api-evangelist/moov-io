@@ -1,0 +1,126 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Moov
+providerId: moov-io
+created: '2026-07-02'
+modified: '2026-07-02'
+reconciled: true
+tags:
+- Payments
+- Money Movement
+- Fintech
+- ACH
+- RTP
+- Cards
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Moov platform spend. Moov bills usage-based per-transaction
+  fees that vary by rail - flat per-transaction for ACH (next-day / same-day),
+  interchange-plus percentage-plus-fixed for card acceptance, and percentage
+  (with min/cap) for RTP credit, push-to-card, and pull-from-card. Additional
+  per-item fees apply to active wallets (monthly), virtual card creation, paid
+  invoices, and bank account validation, plus exception fees for ACH returns
+  and card disputes. A $500 monthly minimum applies.
+notes: >-
+  Rates are subject to change and may be customized per platform; verify against
+  the Moov pricing page and your platform agreement during reconciliation.
+sources:
+- https://moov.io/pricing/
+- https://docs.moov.io/guides/fee-plans/plan-options/
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Moov
+serviceCategory: Financial Services
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: Moov
+  ServiceCategory: Financial Services
+  ProviderName: Moov Financial
+  PublisherName: Moov Financial
+  InvoiceIssuerName: Moov Financial
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: ach_transactions
+  description: ACH transfers billed per transaction (next-day $0.25, same-day $0.40).
+  unit: transactions
+  aggregation: sum
+  dimensions:
+  - account
+  - rail
+  - speed
+- name: card_acceptance
+  description: Card acceptance billed interchange-plus percentage plus fixed per successful charge, with a per-attempt fee.
+  unit: transactions
+  aggregation: sum
+  dimensions:
+  - account
+  - card_type
+  - channel
+- name: instant_payments
+  description: RTP credit and push-to-card billed as a percentage per transaction with min/cap; pull-from-card percentage plus fixed.
+  unit: transactions
+  aggregation: sum
+  dimensions:
+  - account
+  - rail
+- name: active_wallets
+  description: Active stored-balance wallets billed monthly per wallet.
+  unit: wallets
+  aggregation: sum
+  dimensions:
+  - account
+- name: virtual_cards
+  description: Virtual (issued) cards billed per card created.
+  unit: cards
+  aggregation: sum
+  dimensions:
+  - account
+- name: invoices
+  description: Paid invoices billed per paid invoice.
+  unit: invoices
+  aggregation: sum
+  dimensions:
+  - account
+- name: bank_validations
+  description: Bank account validations billed per instant or third-party validation.
+  unit: validations
+  aggregation: sum
+  dimensions:
+  - account
+  - method
+- name: exceptions
+  description: Exception fees for ACH returns, unauthorized returns, and card disputes / chargebacks.
+  unit: events
+  aggregation: sum
+  dimensions:
+  - account
+  - exception_type
+principles:
+- name: Visibility
+  description: Pull Moov billing and transaction reporting; attribute fees per rail and per connected account.
+- name: Allocation
+  description: Use Moov fee plans to map costs to platform vs. connected accounts and internal cost centers.
+- name: Optimization
+  description: Route to cheaper rails where latency allows (next-day ACH vs same-day / RTP); minimize returns and disputes; prune inactive wallets to avoid monthly wallet fees.
+- name: Accountability
+  description: Track the $500 monthly minimum and per-rail spend against budget; review exception fees monthly.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

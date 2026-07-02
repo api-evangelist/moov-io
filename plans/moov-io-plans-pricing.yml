@@ -1,0 +1,215 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Moov
+providerId: moov-io
+created: '2026-07-02'
+modified: '2026-07-02'
+reconciled: true
+tags:
+- Payments
+- Money Movement
+- Fintech
+- ACH
+- RTP
+- Cards
+- Plans
+description: >-
+  Moov uses transparent, usage-based pricing with no long-term contracts. There
+  is a single pay-as-you-go plan with per-transaction fees that vary by rail
+  (ACH, cards, RTP / push-to-card) plus per-item fees for wallets, virtual card
+  creation, invoices, and bank account validation. A $500 monthly minimum
+  applies. Custom / negotiated pricing is available for high-volume platforms.
+  Fees are billed to the platform account; some fees can be passed through to
+  connected accounts via fee plans.
+notes: >-
+  Representative rates from Moov's public pricing page as of 2026-07-02; verify
+  current rates and any card interchange pass-through on the pricing page and in
+  your platform agreement. FedNow and wire pricing are not published publicly
+  and are quoted per platform.
+sources:
+- https://moov.io/pricing/
+- https://docs.moov.io/guides/fee-plans/plan-options/
+- https://docs.moov.io/api/moov-accounts/billing/list-plans/
+plans:
+- id: moov-pay-as-you-go
+  name: Pay-as-you-go
+  type: usage
+  description: >-
+    Usage-based per-transaction pricing across ACH, cards, and instant rails,
+    with a $500 monthly minimum and no long-term contract.
+  entries:
+  - label: ACH next-day credit
+    name: ach_next_day
+    type: usage
+    metric: transactions
+    limit: -1
+    timeFrame: month
+    geo: us
+    unit: 1
+    price: $0.25 per transaction
+    userMultiplied: false
+  - label: ACH same-day
+    name: ach_same_day
+    type: usage
+    metric: transactions
+    limit: -1
+    timeFrame: month
+    geo: us
+    unit: 1
+    price: $0.40 per transaction
+    userMultiplied: false
+  - label: ACH return
+    name: ach_return
+    type: usage
+    metric: returns
+    limit: -1
+    timeFrame: month
+    geo: us
+    unit: 1
+    price: $5.00 per return
+    userMultiplied: false
+  - label: ACH unauthorized return
+    name: ach_unauthorized_return
+    type: usage
+    metric: returns
+    limit: -1
+    timeFrame: month
+    geo: us
+    unit: 1
+    price: $15.00 per return
+    userMultiplied: false
+  - label: Card acceptance (online / mobile)
+    name: card_online
+    type: usage
+    metric: transactions
+    limit: -1
+    timeFrame: month
+    geo: us
+    unit: 1
+    price: Interchange+ + 0.60% + $0.15 per successful US domestic charge ($0.15 per attempt regardless of outcome)
+    userMultiplied: false
+  - label: Card acceptance (Tap to Pay)
+    name: card_tap_to_pay
+    type: usage
+    metric: transactions
+    limit: -1
+    timeFrame: month
+    geo: us
+    unit: 1
+    price: Interchange+ + 0.50% + $0.15 per successful US domestic charge
+    userMultiplied: false
+  - label: International card surcharge
+    name: card_international
+    type: usage
+    metric: transactions
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: +1.5% added to card acceptance rate
+    userMultiplied: false
+  - label: RTP credit & push-to-card
+    name: rtp_push
+    type: usage
+    metric: transactions
+    limit: -1
+    timeFrame: month
+    geo: us
+    unit: 1
+    price: 0.95% per transaction ($0.50 min, $5.00 cap)
+    userMultiplied: false
+  - label: Pull from card
+    name: pull_from_card
+    type: usage
+    metric: transactions
+    limit: -1
+    timeFrame: month
+    geo: us
+    unit: 1
+    price: 0.50% + $0.75 per transaction
+    userMultiplied: false
+  - label: Active wallet
+    name: wallet_active
+    type: recurring
+    metric: wallets
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0.50 monthly per active wallet
+    userMultiplied: true
+  - label: Virtual card creation
+    name: virtual_card
+    type: usage
+    metric: cards
+    limit: -1
+    timeFrame: month
+    geo: us
+    unit: 1
+    price: $0.15 per virtual card
+    userMultiplied: false
+  - label: Paid invoice
+    name: invoice_paid
+    type: usage
+    metric: invoices
+    limit: -1
+    timeFrame: month
+    geo: us
+    unit: 1
+    price: $0.25 per paid invoice
+    userMultiplied: false
+  - label: Bank account validation
+    name: bank_validation
+    type: usage
+    metric: validations
+    limit: -1
+    timeFrame: month
+    geo: us
+    unit: 1
+    price: $0.75 instant / $1.50 third-party (micro-deposits free)
+    userMultiplied: false
+  - label: Monthly minimum
+    name: monthly_minimum
+    type: recurring
+    metric: account
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $500 monthly minimum
+    userMultiplied: false
+  elements:
+  - name: Accounts & Onboarding
+  - name: Bank Accounts
+  - name: Cards
+  - name: Wallets
+  - name: Transfers (ACH / RTP / Card)
+  - name: Refunds & Disputes
+  - name: Sweeps
+  - name: Card Issuing
+- id: moov-custom
+  name: Custom
+  type: enterprise
+  description: >-
+    Negotiated pricing for platforms with large payment volume or unique
+    business models, including custom fee plans, interchange arrangements, and
+    dedicated support. Contact Moov sales.
+  entries:
+  - label: Custom Agreement
+    name: custom
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Volume Pricing
+  - name: Custom Fee Plans
+  - name: Dedicated Support
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

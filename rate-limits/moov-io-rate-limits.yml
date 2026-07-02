@@ -1,0 +1,58 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Moov
+providerId: moov-io
+created: '2026-07-02'
+modified: '2026-07-02'
+reconciled: false
+tags:
+- Payments
+- Money Movement
+- Fintech
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  The Moov API enforces per-account request rate limits and returns HTTP 429
+  (Too Many Requests) when a client exceeds them. Moov does not publish specific
+  numeric per-endpoint limits in its public reference; limits are applied per
+  facilitator / account and may be raised for production platforms. Clients
+  should honor 429 responses with exponential backoff. Webhook event delivery
+  is separate: Moov considers a delivery failed if it does not receive a 2xx
+  within 5 seconds and retries for up to 24 hours.
+notes: >-
+  Specific numeric limits are not documented publicly and are not reconciled in
+  this artifact. Confirm current limits with Moov support or in your platform
+  agreement during reconciliation.
+sources:
+- https://docs.moov.io/api/
+- https://docs.moov.io/guides/webhooks/
+responseCodes:
+  throttled: 429
+limits:
+- name: API Requests
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: Per-account request throttling on the REST API; exact rate is not published publicly.
+- name: Webhook Delivery Timeout
+  scope: endpoint
+  metric: seconds
+  limit: 5
+  notes: A webhook delivery is considered failed if your endpoint does not return a 2xx within 5 seconds.
+- name: Webhook Retry Window
+  scope: endpoint
+  metric: hours
+  limit: 24
+  notes: Failed webhook events are retried multiple times for up to 24 hours.
+policies:
+- name: Backoff Strategy
+  description: On HTTP 429, implement exponential backoff with jitter before retrying.
+- name: Idempotency
+  description: Use idempotency keys on transfer creation to safely retry money-movement requests.
+- name: Webhook Reliability
+  description: Return a 2xx quickly and process events asynchronously; Moov retries for up to 24 hours on failure.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

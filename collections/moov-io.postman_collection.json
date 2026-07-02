@@ -1,0 +1,378 @@
+{
+  "info": {
+    "name": "Moov API",
+    "description": "Money-movement platform API for accepting, storing, sending, and spending money. Base URL: https://api.moov.io. Requests are authenticated with an OAuth 2.0 access token (Bearer). Event notifications are delivered via webhooks (HTTPS POST, HMAC SHA-512); there is no public WebSocket API. This collection covers accounts, funding sources, and money movement. Separately, Moov maintains open-source banking file-format libraries at github.com/moov-io that are not part of this hosted API.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{accessToken}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.moov.io", "type": "string" },
+    { "key": "accessToken", "value": "", "type": "string" },
+    { "key": "accountID", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "Create an account",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"accountType\": \"business\",\n  \"profile\": {}\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts", "host": ["{{baseUrl}}"], "path": ["accounts"] },
+            "description": "Create a Moov account for a business or individual."
+          }
+        },
+        {
+          "name": "List accounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts", "host": ["{{baseUrl}}"], "path": ["accounts"] },
+            "description": "List accounts connected to your platform."
+          }
+        },
+        {
+          "name": "Retrieve an account",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "Retrieve a single account by ID."
+          }
+        },
+        {
+          "name": "Update an account",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "Update an account's profile."
+          }
+        },
+        {
+          "name": "Disconnect an account",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "Disconnect an account from your platform."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Representatives",
+      "item": [
+        {
+          "name": "Add a representative",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/representatives", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "representatives"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "Add a beneficial owner or controller to a business account."
+          }
+        },
+        {
+          "name": "List representatives",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/representatives", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "representatives"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "List the representatives on an account."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Capabilities",
+      "item": [
+        {
+          "name": "Request capabilities",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"capabilities\": [\"transfers\", \"send-funds\", \"collect-funds\", \"wallet\"]\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/capabilities", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "capabilities"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "Request capabilities that enable money movement on an account."
+          }
+        },
+        {
+          "name": "List capabilities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/capabilities", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "capabilities"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "List the capabilities enabled on an account."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bank Accounts",
+      "item": [
+        {
+          "name": "Link a bank account",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"account\": {\n    \"holderName\": \"Jane Doe\",\n    \"holderType\": \"individual\",\n    \"accountNumber\": \"0004321567000\",\n    \"routingNumber\": \"123456789\",\n    \"bankAccountType\": \"checking\"\n  }\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/bank-accounts", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "bank-accounts"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "Link a bank account as a funding source."
+          }
+        },
+        {
+          "name": "List bank accounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/bank-accounts", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "bank-accounts"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "List the bank accounts linked to an account."
+          }
+        },
+        {
+          "name": "Initiate micro-deposits",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/bank-accounts/:bankAccountID/micro-deposits", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "bank-accounts", ":bankAccountID", "micro-deposits"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }, { "key": "bankAccountID", "value": "" }] },
+            "description": "Initiate micro-deposits to verify a bank account."
+          }
+        },
+        {
+          "name": "Complete micro-deposits",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"amounts\": [12, 7]\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/bank-accounts/:bankAccountID/micro-deposits", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "bank-accounts", ":bankAccountID", "micro-deposits"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }, { "key": "bankAccountID", "value": "" }] },
+            "description": "Complete micro-deposit verification with the deposited amounts."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cards",
+      "item": [
+        {
+          "name": "Link a card",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"cardNumber\": \"4111111111111111\",\n  \"cardCvv\": \"123\",\n  \"expiration\": { \"month\": \"12\", \"year\": \"28\" },\n  \"holderName\": \"Jane Doe\"\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/cards", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "cards"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "Link a payment card as a funding source."
+          }
+        },
+        {
+          "name": "List cards",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/cards", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "cards"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "List the cards linked to an account."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Wallets",
+      "item": [
+        {
+          "name": "List wallets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/wallets", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "wallets"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "List an account's stored-balance wallets."
+          }
+        },
+        {
+          "name": "List wallet transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/wallets/:walletID/transactions", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "wallets", ":walletID", "transactions"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }, { "key": "walletID", "value": "" }] },
+            "description": "List the ledgered transactions for a wallet."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payment Methods",
+      "item": [
+        {
+          "name": "List payment methods",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/payment-methods", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "payment-methods"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "List the payment methods (funding source + rail combinations) on an account."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transfers",
+      "item": [
+        {
+          "name": "Create a transfer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "X-Idempotency-Key", "value": "{{$guid}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"source\": { \"paymentMethodID\": \"\" },\n  \"destination\": { \"paymentMethodID\": \"\" },\n  \"amount\": { \"currency\": \"USD\", \"value\": 1000 }\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/transfers", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "transfers"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "Create a transfer between a source and destination payment method."
+          }
+        },
+        {
+          "name": "List transfers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/transfers", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "transfers"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "List transfers for an account."
+          }
+        },
+        {
+          "name": "Retrieve a transfer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/transfers/:transferID", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "transfers", ":transferID"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }, { "key": "transferID", "value": "" }] },
+            "description": "Retrieve a single transfer by ID."
+          }
+        },
+        {
+          "name": "Retrieve transfer options",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"source\": {},\n  \"destination\": {},\n  \"amount\": { \"currency\": \"USD\", \"value\": 1000 }\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/transfer-options", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "transfer-options"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "Retrieve the available payment method options for a transfer."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Refunds",
+      "item": [
+        {
+          "name": "Create a refund",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"amount\": { \"currency\": \"USD\", \"value\": 1000 }\n}" },
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/transfers/:transferID/refunds", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "transfers", ":transferID", "refunds"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }, { "key": "transferID", "value": "" }] },
+            "description": "Create a refund on a completed card transfer."
+          }
+        },
+        {
+          "name": "List refunds",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/transfers/:transferID/refunds", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "transfers", ":transferID", "refunds"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }, { "key": "transferID", "value": "" }] },
+            "description": "List the refunds on a transfer."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sweeps",
+      "item": [
+        {
+          "name": "List sweep configs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/sweep-configs", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "sweep-configs"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "List the sweep configurations on an account."
+          }
+        },
+        {
+          "name": "List sweeps for a wallet",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/wallets/:walletID/sweeps", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "wallets", ":walletID", "sweeps"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }, { "key": "walletID", "value": "" }] },
+            "description": "List the sweeps produced for a wallet."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Disputes",
+      "item": [
+        {
+          "name": "List disputes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/disputes", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "disputes"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "List the card disputes on an account."
+          }
+        },
+        {
+          "name": "Accept a dispute",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/accounts/:accountID/disputes/:disputeID/accept", "host": ["{{baseUrl}}"], "path": ["accounts", ":accountID", "disputes", ":disputeID", "accept"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }, { "key": "disputeID", "value": "" }] },
+            "description": "Accept a dispute rather than contesting it."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Card Issuing",
+      "item": [
+        {
+          "name": "Create a spending card",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"fundingWalletID\": \"\",\n  \"formFactor\": \"virtual\"\n}" },
+            "url": { "raw": "{{baseUrl}}/issuing/:accountID/cards", "host": ["{{baseUrl}}"], "path": ["issuing", ":accountID", "cards"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "Issue a virtual spending card backed by a wallet."
+          }
+        },
+        {
+          "name": "List authorizations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/issuing/:accountID/authorizations", "host": ["{{baseUrl}}"], "path": ["issuing", ":accountID", "authorizations"], "variable": [{ "key": "accountID", "value": "{{accountID}}" }] },
+            "description": "List authorizations generated by issued cards."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Institutions",
+      "item": [
+        {
+          "name": "Look up institutions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/institutions?routingNumber=123456789", "host": ["{{baseUrl}}"], "path": ["institutions"], "query": [{ "key": "routingNumber", "value": "123456789" }] },
+            "description": "Validate a financial institution and check available rails for a routing number."
+          }
+        }
+      ]
+    }
+  ]
+}
