@@ -1,0 +1,28 @@
+generated: '2026-07-11'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: moov.io
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  7 18:49:20 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: docs.moov.io
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  6 21:33:43 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: api.moov.io
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 13 23:59:59 2026 GMT
+  hsts: null
+domains:
+- domain: moov.io
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine

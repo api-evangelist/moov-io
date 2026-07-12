@@ -283,10 +283,18 @@ apis:
     payment activity, and check which payment rails (ACH, RTP, wire) are available
     for a given routing number.
 common:
+- type: TrustCenter
+  url: security/moov-io-trust-center.yml
+- type: DomainSecurity
+  url: security/moov-io-domain-security.yml
+- type: Authentication
+  url: authentication/moov-io-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/moov-io
 - type: LinkedIn
   url: https://www.linkedin.com/company/moov-financial
+- url: https://moov.io/blog/index.xml
+  type: Blog
 - type: Website
   url: https://moov.io
 - type: Documentation
