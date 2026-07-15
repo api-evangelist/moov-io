@@ -283,6 +283,8 @@ apis:
     payment activity, and check which payment rails (ACH, RTP, wire) are available
     for a given routing number.
 common:
+- type: AgenticAccess
+  url: agentic-access/moov-io-agentic-access.yml
 - type: TrustCenter
   url: security/moov-io-trust-center.yml
 - type: DomainSecurity
