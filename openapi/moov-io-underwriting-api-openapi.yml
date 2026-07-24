@@ -1,0 +1,56 @@
+openapi: 3.0.3
+info:
+  title: Moov Accounts Underwriting API
+  description: The Moov API lets software platforms accept, store, send, and spend money through a single REST API. It is organized around Moov accounts, funding sources (bank accounts, cards, wallets, payment methods), and money movement (transfers, refunds, disputes, sweeps, card issuing). The API is based on REST principles, returns JSON, and uses standard HTTP response codes. Requests are authenticated with an OAuth 2.0 access token (Bearer). Event notifications are delivered via webhooks (HTTPS POST with an HMAC SHA-512 signature); Moov does not expose a public WebSocket API. This document models a representative subset of the commercial hosted API at api.moov.io - the canonical, machine-generated OpenAPI spec is published by Moov (see externalDocs). Separately, Moov maintains open-source Go libraries for banking file formats at github.com/moov-io, which are not part of this API.
+  version: v2026.04.00
+  contact:
+    name: Moov
+    url: https://moov.io
+  termsOfService: https://moov.io/legal/platform-agreement/
+servers:
+- url: https://api.moov.io
+  description: Moov production
+security:
+- bearerAuth: []
+tags:
+- name: Underwriting
+  description: Underwriting details used to enable card acquiring and higher-risk activity.
+paths:
+  /accounts/{accountID}/underwriting:
+    parameters:
+    - $ref: '#/components/parameters/accountID'
+    get:
+      operationId: getUnderwriting
+      tags:
+      - Underwriting
+      summary: Retrieve underwriting details.
+      responses:
+        '200':
+          description: The underwriting details.
+    put:
+      operationId: upsertUnderwriting
+      tags:
+      - Underwriting
+      summary: Create or update underwriting details.
+      responses:
+        '200':
+          description: The updated underwriting details.
+components:
+  parameters:
+    accountID:
+      name: accountID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Moov account identifier.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 access token passed as a Bearer token.
+externalDocs:
+  description: Moov API reference and canonical OpenAPI spec
+  url: https://docs.moov.io/api/

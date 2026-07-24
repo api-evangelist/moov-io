@@ -1,0 +1,88 @@
+openapi: 3.0.3
+info:
+  title: Moov Accounts Cards API
+  description: The Moov API lets software platforms accept, store, send, and spend money through a single REST API. It is organized around Moov accounts, funding sources (bank accounts, cards, wallets, payment methods), and money movement (transfers, refunds, disputes, sweeps, card issuing). The API is based on REST principles, returns JSON, and uses standard HTTP response codes. Requests are authenticated with an OAuth 2.0 access token (Bearer). Event notifications are delivered via webhooks (HTTPS POST with an HMAC SHA-512 signature); Moov does not expose a public WebSocket API. This document models a representative subset of the commercial hosted API at api.moov.io - the canonical, machine-generated OpenAPI spec is published by Moov (see externalDocs). Separately, Moov maintains open-source Go libraries for banking file formats at github.com/moov-io, which are not part of this API.
+  version: v2026.04.00
+  contact:
+    name: Moov
+    url: https://moov.io
+  termsOfService: https://moov.io/legal/platform-agreement/
+servers:
+- url: https://api.moov.io
+  description: Moov production
+security:
+- bearerAuth: []
+tags:
+- name: Cards
+  description: Payment cards linked as funding sources.
+paths:
+  /accounts/{accountID}/cards:
+    parameters:
+    - $ref: '#/components/parameters/accountID'
+    post:
+      operationId: linkCard
+      tags:
+      - Cards
+      summary: Link a card.
+      responses:
+        '200':
+          description: The linked card.
+    get:
+      operationId: listCards
+      tags:
+      - Cards
+      summary: List cards.
+      responses:
+        '200':
+          description: A list of cards.
+  /accounts/{accountID}/cards/{cardID}:
+    parameters:
+    - $ref: '#/components/parameters/accountID'
+    - name: cardID
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getCard
+      tags:
+      - Cards
+      summary: Retrieve a card.
+      responses:
+        '200':
+          description: The card.
+    patch:
+      operationId: updateCard
+      tags:
+      - Cards
+      summary: Update a card.
+      responses:
+        '200':
+          description: The updated card.
+    delete:
+      operationId: disableCard
+      tags:
+      - Cards
+      summary: Disable a card.
+      responses:
+        '204':
+          description: Card disabled.
+components:
+  parameters:
+    accountID:
+      name: accountID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Moov account identifier.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 access token passed as a Bearer token.
+externalDocs:
+  description: Moov API reference and canonical OpenAPI spec
+  url: https://docs.moov.io/api/

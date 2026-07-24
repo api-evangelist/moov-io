@@ -1,0 +1,131 @@
+openapi: 3.0.3
+info:
+  title: Moov Accounts Bank Accounts API
+  description: The Moov API lets software platforms accept, store, send, and spend money through a single REST API. It is organized around Moov accounts, funding sources (bank accounts, cards, wallets, payment methods), and money movement (transfers, refunds, disputes, sweeps, card issuing). The API is based on REST principles, returns JSON, and uses standard HTTP response codes. Requests are authenticated with an OAuth 2.0 access token (Bearer). Event notifications are delivered via webhooks (HTTPS POST with an HMAC SHA-512 signature); Moov does not expose a public WebSocket API. This document models a representative subset of the commercial hosted API at api.moov.io - the canonical, machine-generated OpenAPI spec is published by Moov (see externalDocs). Separately, Moov maintains open-source Go libraries for banking file formats at github.com/moov-io, which are not part of this API.
+  version: v2026.04.00
+  contact:
+    name: Moov
+    url: https://moov.io
+  termsOfService: https://moov.io/legal/platform-agreement/
+servers:
+- url: https://api.moov.io
+  description: Moov production
+security:
+- bearerAuth: []
+tags:
+- name: Bank Accounts
+  description: Bank accounts linked as funding sources, with verification.
+paths:
+  /accounts/{accountID}/bank-accounts:
+    parameters:
+    - $ref: '#/components/parameters/accountID'
+    post:
+      operationId: linkBankAccount
+      tags:
+      - Bank Accounts
+      summary: Link a bank account.
+      responses:
+        '200':
+          description: The linked bank account.
+    get:
+      operationId: listBankAccounts
+      tags:
+      - Bank Accounts
+      summary: List bank accounts.
+      responses:
+        '200':
+          description: A list of bank accounts.
+  /accounts/{accountID}/bank-accounts/{bankAccountID}:
+    parameters:
+    - $ref: '#/components/parameters/accountID'
+    - $ref: '#/components/parameters/bankAccountID'
+    get:
+      operationId: getBankAccount
+      tags:
+      - Bank Accounts
+      summary: Retrieve a bank account.
+      responses:
+        '200':
+          description: The bank account.
+    delete:
+      operationId: deleteBankAccount
+      tags:
+      - Bank Accounts
+      summary: Delete a bank account.
+      responses:
+        '204':
+          description: Bank account deleted.
+  /accounts/{accountID}/bank-accounts/{bankAccountID}/verify:
+    parameters:
+    - $ref: '#/components/parameters/accountID'
+    - $ref: '#/components/parameters/bankAccountID'
+    post:
+      operationId: initiateBankAccountVerification
+      tags:
+      - Bank Accounts
+      summary: Initiate instant bank account verification.
+      responses:
+        '200':
+          description: Verification initiated.
+    put:
+      operationId: completeBankAccountVerification
+      tags:
+      - Bank Accounts
+      summary: Complete instant bank account verification.
+      responses:
+        '200':
+          description: Verification completed.
+    get:
+      operationId: getBankAccountVerification
+      tags:
+      - Bank Accounts
+      summary: Get bank account verification.
+      responses:
+        '200':
+          description: The verification status.
+  /accounts/{accountID}/bank-accounts/{bankAccountID}/micro-deposits:
+    parameters:
+    - $ref: '#/components/parameters/accountID'
+    - $ref: '#/components/parameters/bankAccountID'
+    post:
+      operationId: initiateMicroDeposits
+      tags:
+      - Bank Accounts
+      summary: Initiate micro-deposits.
+      responses:
+        '200':
+          description: Micro-deposits initiated.
+    put:
+      operationId: completeMicroDeposits
+      tags:
+      - Bank Accounts
+      summary: Complete micro-deposits.
+      responses:
+        '200':
+          description: Micro-deposits verified.
+components:
+  parameters:
+    bankAccountID:
+      name: bankAccountID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    accountID:
+      name: accountID
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Moov account identifier.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 access token passed as a Bearer token.
+externalDocs:
+  description: Moov API reference and canonical OpenAPI spec
+  url: https://docs.moov.io/api/
