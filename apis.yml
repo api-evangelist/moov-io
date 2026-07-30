@@ -11,7 +11,20 @@ description: Moov is a money-movement platform that lets software teams accept, 
   (github.com/moov-io) of Go libraries for banking file formats (ACH, wire, IAT, and
   more); this catalog documents the commercial hosted Moov money-movement API at
   api.moov.io.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: paid
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Paid · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/moov-io.png
 tags:
 - Payments
 - Money Movement
@@ -27,261 +40,648 @@ specificationVersion: '0.19'
 apis:
 - aid: moov-io:moov-io-accounts-api
   name: Moov Accounts API
-  tags:
-  - Accounts
-  - Onboarding
-  - KYC
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  description: Business and individual accounts, the core money-movement identity.
   humanURL: https://docs.moov.io/api/moov-accounts/accounts/
   baseURL: https://api.moov.io
-  properties:
-  - url: https://docs.moov.io/api/moov-accounts/accounts/
-    type: APIReference
-  - url: https://docs.moov.io/guides/accounts/
-    type: Documentation
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  - url: collections/moov-io.postman_collection.json
-    type: PostmanCollection
-  - url: collections/moov-io.opencollection.json
-    type: OpenCollection
-  description: Create and manage Moov accounts for businesses and individuals - the
-    core identity onto which funding sources, capabilities, and money movement are
-    attached. Supports creating, listing, retrieving, updating, and disconnecting
-    accounts, plus account connections and a terms-of-service token.
-- aid: moov-io:moov-io-representatives-api
-  name: Moov Representatives API
   tags:
-  - Representatives
-  - KYC
-  - Ownership
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.moov.io/api/moov-accounts/representatives/
-  baseURL: https://api.moov.io
+  - Accounts
   properties:
-  - url: https://docs.moov.io/api/moov-accounts/representatives/
-    type: APIReference
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  - url: collections/moov-io.postman_collection.json
-    type: PostmanCollection
-  description: Add, list, retrieve, update, and remove the beneficial owners and
-    controllers (representatives) attached to a business account for KYC / KYB
-    verification.
-- aid: moov-io:moov-io-capabilities-api
-  name: Moov Capabilities API
-  tags:
-  - Capabilities
-  - Onboarding
-  - Compliance
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.moov.io/api/moov-accounts/capabilities/
-  baseURL: https://api.moov.io
-  properties:
-  - url: https://docs.moov.io/api/moov-accounts/capabilities/
-    type: APIReference
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  description: Request, list, retrieve, and disable the capabilities (transfers,
-    send-funds, collect-funds, wallet, card-issuing, etc.) that determine what money
-    movement an account is enabled to perform.
-- aid: moov-io:moov-io-underwriting-api
-  name: Moov Underwriting API
-  tags:
-  - Underwriting
-  - Risk
-  - Compliance
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.moov.io/api/moov-accounts/underwriting/
-  baseURL: https://api.moov.io
-  properties:
-  - url: https://docs.moov.io/api/moov-accounts/underwriting/
-    type: APIReference
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  description: Retrieve and update the underwriting details (expected activity,
-    volume, and business model) Moov uses to enable card acquiring and higher-risk
-    money-movement capabilities on an account.
+  - type: OpenAPI
+    url: openapi/moov-io-accounts-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
 - aid: moov-io:moov-io-bank-accounts-api
   name: Moov Bank Accounts API
+  description: Bank accounts linked as funding sources, with verification.
+  humanURL: https://docs.moov.io/api/moov-accounts/accounts/
+  baseURL: https://api.moov.io
   tags:
   - Bank Accounts
-  - ACH
-  - Verification
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.moov.io/api/sources/bank-accounts/
-  baseURL: https://api.moov.io
   properties:
-  - url: https://docs.moov.io/api/sources/bank-accounts/
-    type: APIReference
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  - url: collections/moov-io.postman_collection.json
-    type: PostmanCollection
-  description: Link, list, retrieve, and delete bank accounts as funding sources,
-    and verify them via instant verification or micro-deposits for ACH and RTP
-    money movement.
-- aid: moov-io:moov-io-cards-api
-  name: Moov Cards API
+  - type: OpenAPI
+    url: openapi/moov-io-bank-accounts-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
+- aid: moov-io:moov-io-capabilities-api
+  name: Moov Capabilities API
+  description: Money-movement capabilities enabled on an account.
+  humanURL: https://docs.moov.io/api/moov-accounts/accounts/
+  baseURL: https://api.moov.io
   tags:
-  - Cards
-  - Funding Source
-  - PCI
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.moov.io/api/sources/cards/
-  baseURL: https://api.moov.io
+  - Capabilities
   properties:
-  - url: https://docs.moov.io/api/sources/cards/
-    type: APIReference
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  - url: collections/moov-io.postman_collection.json
-    type: PostmanCollection
-  description: Link, list, retrieve, update, and disable payment cards as funding
-    sources, with verification (CVV / address) for card acquiring, pull-from-card,
-    and push-to-card money movement.
-- aid: moov-io:moov-io-wallets-api
-  name: Moov Wallets API
-  tags:
-  - Wallets
-  - Balances
-  - Ledger
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.moov.io/api/sources/wallets/
-  baseURL: https://api.moov.io
-  properties:
-  - url: https://docs.moov.io/api/sources/wallets/
-    type: APIReference
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  description: Create and manage Moov wallets (stored-balance accounts), inspect
-    wallet balances and their ledgered transactions, and review balance
-    adjustments.
-- aid: moov-io:moov-io-payment-methods-api
-  name: Moov Payment Methods API
-  tags:
-  - Payment Methods
-  - Rails
-  - Funding Source
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.moov.io/api/sources/payment-methods/
-  baseURL: https://api.moov.io
-  properties:
-  - url: https://docs.moov.io/api/sources/payment-methods/
-    type: APIReference
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  description: List and retrieve the payment methods available on an account - the
-    concrete combinations of a funding source (bank account, card, or wallet) and a
-    rail (ACH, RTP, card, wallet) that can be used as the source or destination of a
-    transfer.
-- aid: moov-io:moov-io-transfers-api
-  name: Moov Transfers API
-  tags:
-  - Transfers
-  - Money Movement
-  - ACH
-  - RTP
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.moov.io/api/money-movement/transfers/
-  baseURL: https://api.moov.io
-  properties:
-  - url: https://docs.moov.io/api/money-movement/transfers/
-    type: APIReference
-  - url: https://docs.moov.io/guides/money-movement/
-    type: Documentation
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  - url: collections/moov-io.postman_collection.json
-    type: PostmanCollection
-  description: Move money between funding sources across ACH, RTP, push-to-card, and
-    card acquiring. Create, list, retrieve, and patch transfers; look up transfer
-    options and per-account transfer configuration; and cancel transfers.
-- aid: moov-io:moov-io-refunds-api
-  name: Moov Refunds API
-  tags:
-  - Refunds
-  - Reversals
-  - Cards
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.moov.io/api/money-movement/refunds/
-  baseURL: https://api.moov.io
-  properties:
-  - url: https://docs.moov.io/api/money-movement/refunds/
-    type: APIReference
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  description: Refund and reverse card transfers - create a refund on a completed
-    card transfer, cancel or reverse a still-authorized card transfer, and list or
-    retrieve the refunds on a transfer.
-- aid: moov-io:moov-io-sweeps-api
-  name: Moov Sweeps API
-  tags:
-  - Sweeps
-  - Wallets
-  - Automation
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.moov.io/api/money-movement/sweeps/
-  baseURL: https://api.moov.io
-  properties:
-  - url: https://docs.moov.io/api/money-movement/sweeps/
-    type: APIReference
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  description: Configure automated sweeps that move accumulated wallet balances to a
-    designated bank account on a schedule. Create, list, retrieve, and update sweep
-    configurations, and inspect the individual sweeps they produce.
-- aid: moov-io:moov-io-disputes-api
-  name: Moov Disputes API
-  tags:
-  - Disputes
-  - Chargebacks
-  - Evidence
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.moov.io/api/money-movement/disputes/
-  baseURL: https://api.moov.io
-  properties:
-  - url: https://docs.moov.io/api/money-movement/disputes/
-    type: APIReference
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  description: Manage card disputes and chargebacks - list and retrieve disputes,
-    accept a dispute, and upload, submit, list, retrieve, and delete the evidence
-    (files and text) used to respond to a dispute.
+  - type: OpenAPI
+    url: openapi/moov-io-capabilities-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
 - aid: moov-io:moov-io-card-issuing-api
   name: Moov Card Issuing API
+  description: Virtual spending cards, authorizations, and card transactions.
+  humanURL: https://docs.moov.io/api/moov-accounts/accounts/
+  baseURL: https://api.moov.io
   tags:
   - Card Issuing
-  - Virtual Cards
-  - Spend
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.moov.io/guides/money-movement/spend/card-issuing/
-  baseURL: https://api.moov.io
   properties:
-  - url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
-    type: Documentation
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  description: Issue virtual spending cards backed by a Moov wallet, retrieve full
-    PCI card details, and review the authorizations, authorization events, and
-    settled card transactions those issued cards generate.
+  - type: OpenAPI
+    url: openapi/moov-io-card-issuing-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
+- aid: moov-io:moov-io-cards-api
+  name: Moov Cards API
+  description: Payment cards linked as funding sources.
+  humanURL: https://docs.moov.io/api/moov-accounts/accounts/
+  baseURL: https://api.moov.io
+  tags:
+  - Cards
+  properties:
+  - type: OpenAPI
+    url: openapi/moov-io-cards-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
+- aid: moov-io:moov-io-disputes-api
+  name: Moov Disputes API
+  description: Card disputes, chargebacks, and evidence.
+  humanURL: https://docs.moov.io/api/moov-accounts/accounts/
+  baseURL: https://api.moov.io
+  tags:
+  - Disputes
+  properties:
+  - type: OpenAPI
+    url: openapi/moov-io-disputes-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
 - aid: moov-io:moov-io-institutions-api
   name: Moov Institutions API
+  description: Financial institution lookup by routing number.
+  humanURL: https://docs.moov.io/api/moov-accounts/accounts/
+  baseURL: https://api.moov.io
   tags:
   - Institutions
-  - Routing Numbers
-  - Enrichment
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.moov.io/api/enrichment/institutions/
-  baseURL: https://api.moov.io
   properties:
-  - url: https://docs.moov.io/api/enrichment/institutions/
-    type: APIReference
-  - url: openapi/moov-io-openapi.yml
-    type: OpenAPI
-  description: Validate a financial institution by routing number before initiating
-    payment activity, and check which payment rails (ACH, RTP, wire) are available
-    for a given routing number.
+  - type: OpenAPI
+    url: openapi/moov-io-institutions-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
+- aid: moov-io:moov-io-payment-methods-api
+  name: Moov Payment Methods API
+  description: Funding-source and rail combinations usable in transfers.
+  humanURL: https://docs.moov.io/api/moov-accounts/accounts/
+  baseURL: https://api.moov.io
+  tags:
+  - Payment Methods
+  properties:
+  - type: OpenAPI
+    url: openapi/moov-io-payment-methods-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
+- aid: moov-io:moov-io-refunds-api
+  name: Moov Refunds API
+  description: Refunds and reversals on card transfers.
+  humanURL: https://docs.moov.io/api/moov-accounts/accounts/
+  baseURL: https://api.moov.io
+  tags:
+  - Refunds
+  properties:
+  - type: OpenAPI
+    url: openapi/moov-io-refunds-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
+- aid: moov-io:moov-io-representatives-api
+  name: Moov Representatives API
+  description: Beneficial owners and controllers attached to a business account.
+  humanURL: https://docs.moov.io/api/moov-accounts/accounts/
+  baseURL: https://api.moov.io
+  tags:
+  - Representatives
+  properties:
+  - type: OpenAPI
+    url: openapi/moov-io-representatives-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
+- aid: moov-io:moov-io-sweeps-api
+  name: Moov Sweeps API
+  description: Automated sweeps of wallet balances to a bank account.
+  humanURL: https://docs.moov.io/api/moov-accounts/accounts/
+  baseURL: https://api.moov.io
+  tags:
+  - Sweeps
+  properties:
+  - type: OpenAPI
+    url: openapi/moov-io-sweeps-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
+- aid: moov-io:moov-io-transfers-api
+  name: Moov Transfers API
+  description: Money movement across ACH, RTP, push-to-card, and card acquiring.
+  humanURL: https://docs.moov.io/api/moov-accounts/accounts/
+  baseURL: https://api.moov.io
+  tags:
+  - Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/moov-io-transfers-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
+- aid: moov-io:moov-io-underwriting-api
+  name: Moov Underwriting API
+  description: Underwriting details used to enable card acquiring and higher-risk activity.
+  humanURL: https://docs.moov.io/api/moov-accounts/accounts/
+  baseURL: https://api.moov.io
+  tags:
+  - Underwriting
+  properties:
+  - type: OpenAPI
+    url: openapi/moov-io-underwriting-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
+- aid: moov-io:moov-io-wallets-api
+  name: Moov Wallets API
+  description: Stored-balance wallets and their ledgered transactions.
+  humanURL: https://docs.moov.io/api/moov-accounts/accounts/
+  baseURL: https://api.moov.io
+  tags:
+  - Wallets
+  properties:
+  - type: OpenAPI
+    url: openapi/moov-io-wallets-api-openapi.yml
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/accounts/
+  - type: Documentation
+    url: https://docs.moov.io/guides/accounts/
+  - type: PostmanCollection
+    url: collections/moov-io.postman_collection.json
+  - type: OpenCollection
+    url: collections/moov-io.opencollection.json
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/representatives/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/capabilities/
+  - type: APIReference
+    url: https://docs.moov.io/api/moov-accounts/underwriting/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/bank-accounts/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/cards/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/wallets/
+  - type: APIReference
+    url: https://docs.moov.io/api/sources/payment-methods/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/transfers/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/refunds/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/sweeps/
+  - type: APIReference
+    url: https://docs.moov.io/api/money-movement/disputes/
+  - type: Documentation
+    url: https://docs.moov.io/guides/money-movement/spend/card-issuing/
+  - type: APIReference
+    url: https://docs.moov.io/api/enrichment/institutions/
 common:
 - type: AgenticAccess
   url: agentic-access/moov-io-agentic-access.yml
