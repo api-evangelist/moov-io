@@ -1,0 +1,864 @@
+openapi: 3.0.3
+info:
+  title: Moov API
+  description: >-
+    The Moov API lets software platforms accept, store, send, and spend money
+    through a single REST API. It is organized around Moov accounts, funding
+    sources (bank accounts, cards, wallets, payment methods), and money movement
+    (transfers, refunds, disputes, sweeps, card issuing). The API is based on
+    REST principles, returns JSON, and uses standard HTTP response codes.
+    Requests are authenticated with an OAuth 2.0 access token (Bearer). Event
+    notifications are delivered via webhooks (HTTPS POST with an HMAC SHA-512
+    signature); Moov does not expose a public WebSocket API. This document
+    models a representative subset of the commercial hosted API at api.moov.io -
+    the canonical, machine-generated OpenAPI spec is published by Moov (see
+    externalDocs). Separately, Moov maintains open-source Go libraries for
+    banking file formats at github.com/moov-io, which are not part of this API.
+  version: v2026.04.00
+  contact:
+    name: Moov
+    url: https://moov.io
+  termsOfService: https://moov.io/legal/platform-agreement/
+externalDocs:
+  description: Moov API reference and canonical OpenAPI spec
+  url: https://docs.moov.io/api/
+servers:
+  - url: https://api.moov.io
+    description: Moov production
+security:
+  - bearerAuth: []
+tags:
+  - name: Accounts
+    description: Business and individual accounts, the core money-movement identity.
+  - name: Representatives
+    description: Beneficial owners and controllers attached to a business account.
+  - name: Capabilities
+    description: Money-movement capabilities enabled on an account.
+  - name: Underwriting
+    description: Underwriting details used to enable card acquiring and higher-risk activity.
+  - name: Bank Accounts
+    description: Bank accounts linked as funding sources, with verification.
+  - name: Cards
+    description: Payment cards linked as funding sources.
+  - name: Wallets
+    description: Stored-balance wallets and their ledgered transactions.
+  - name: Payment Methods
+    description: Funding-source and rail combinations usable in transfers.
+  - name: Transfers
+    description: Money movement across ACH, RTP, push-to-card, and card acquiring.
+  - name: Refunds
+    description: Refunds and reversals on card transfers.
+  - name: Sweeps
+    description: Automated sweeps of wallet balances to a bank account.
+  - name: Disputes
+    description: Card disputes, chargebacks, and evidence.
+  - name: Card Issuing
+    description: Virtual spending cards, authorizations, and card transactions.
+  - name: Institutions
+    description: Financial institution lookup by routing number.
+paths:
+  /accounts:
+    post:
+      operationId: createAccount
+      tags: [Accounts]
+      summary: Create an account.
+      responses:
+        '200': { description: The created account. }
+    get:
+      operationId: listAccounts
+      tags: [Accounts]
+      summary: List accounts.
+      responses:
+        '200': { description: A list of accounts. }
+  /accounts/{accountID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    get:
+      operationId: getAccount
+      tags: [Accounts]
+      summary: Retrieve an account.
+      responses:
+        '200': { description: The account. }
+    patch:
+      operationId: updateAccount
+      tags: [Accounts]
+      summary: Update an account.
+      responses:
+        '200': { description: The updated account. }
+    delete:
+      operationId: disconnectAccount
+      tags: [Accounts]
+      summary: Disconnect an account.
+      responses:
+        '204': { description: Account disconnected. }
+  /accounts/{accountID}/connections:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    post:
+      operationId: createConnection
+      tags: [Accounts]
+      summary: Create an account connection.
+      responses:
+        '200': { description: The created connection. }
+  /accounts/{accountID}/connected-accounts:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    get:
+      operationId: listConnectedAccounts
+      tags: [Accounts]
+      summary: List connected accounts.
+      responses:
+        '200': { description: A list of connected accounts. }
+  /tos-token:
+    get:
+      operationId: getTermsOfServiceToken
+      tags: [Accounts]
+      summary: Generate a terms-of-service token.
+      responses:
+        '200': { description: A terms-of-service token. }
+  /accounts/{accountID}/representatives:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    post:
+      operationId: createRepresentative
+      tags: [Representatives]
+      summary: Add a representative.
+      responses:
+        '200': { description: The created representative. }
+    get:
+      operationId: listRepresentatives
+      tags: [Representatives]
+      summary: List representatives.
+      responses:
+        '200': { description: A list of representatives. }
+  /accounts/{accountID}/representatives/{representativeID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/representativeID'
+    get:
+      operationId: getRepresentative
+      tags: [Representatives]
+      summary: Retrieve a representative.
+      responses:
+        '200': { description: The representative. }
+    patch:
+      operationId: updateRepresentative
+      tags: [Representatives]
+      summary: Update a representative.
+      responses:
+        '200': { description: The updated representative. }
+    delete:
+      operationId: deleteRepresentative
+      tags: [Representatives]
+      summary: Remove a representative.
+      responses:
+        '204': { description: Representative removed. }
+  /accounts/{accountID}/capabilities:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    post:
+      operationId: requestCapabilities
+      tags: [Capabilities]
+      summary: Request capabilities.
+      responses:
+        '200': { description: The requested capabilities. }
+    get:
+      operationId: listCapabilities
+      tags: [Capabilities]
+      summary: List capabilities.
+      responses:
+        '200': { description: A list of capabilities. }
+  /accounts/{accountID}/capabilities/{capabilityID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - name: capabilityID
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getCapability
+      tags: [Capabilities]
+      summary: Retrieve a capability.
+      responses:
+        '200': { description: The capability. }
+    delete:
+      operationId: disableCapability
+      tags: [Capabilities]
+      summary: Disable a capability.
+      responses:
+        '204': { description: Capability disabled. }
+  /accounts/{accountID}/underwriting:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    get:
+      operationId: getUnderwriting
+      tags: [Underwriting]
+      summary: Retrieve underwriting details.
+      responses:
+        '200': { description: The underwriting details. }
+    put:
+      operationId: upsertUnderwriting
+      tags: [Underwriting]
+      summary: Create or update underwriting details.
+      responses:
+        '200': { description: The updated underwriting details. }
+  /accounts/{accountID}/bank-accounts:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    post:
+      operationId: linkBankAccount
+      tags: [Bank Accounts]
+      summary: Link a bank account.
+      responses:
+        '200': { description: The linked bank account. }
+    get:
+      operationId: listBankAccounts
+      tags: [Bank Accounts]
+      summary: List bank accounts.
+      responses:
+        '200': { description: A list of bank accounts. }
+  /accounts/{accountID}/bank-accounts/{bankAccountID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/bankAccountID'
+    get:
+      operationId: getBankAccount
+      tags: [Bank Accounts]
+      summary: Retrieve a bank account.
+      responses:
+        '200': { description: The bank account. }
+    delete:
+      operationId: deleteBankAccount
+      tags: [Bank Accounts]
+      summary: Delete a bank account.
+      responses:
+        '204': { description: Bank account deleted. }
+  /accounts/{accountID}/bank-accounts/{bankAccountID}/verify:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/bankAccountID'
+    post:
+      operationId: initiateBankAccountVerification
+      tags: [Bank Accounts]
+      summary: Initiate instant bank account verification.
+      responses:
+        '200': { description: Verification initiated. }
+    put:
+      operationId: completeBankAccountVerification
+      tags: [Bank Accounts]
+      summary: Complete instant bank account verification.
+      responses:
+        '200': { description: Verification completed. }
+    get:
+      operationId: getBankAccountVerification
+      tags: [Bank Accounts]
+      summary: Get bank account verification.
+      responses:
+        '200': { description: The verification status. }
+  /accounts/{accountID}/bank-accounts/{bankAccountID}/micro-deposits:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/bankAccountID'
+    post:
+      operationId: initiateMicroDeposits
+      tags: [Bank Accounts]
+      summary: Initiate micro-deposits.
+      responses:
+        '200': { description: Micro-deposits initiated. }
+    put:
+      operationId: completeMicroDeposits
+      tags: [Bank Accounts]
+      summary: Complete micro-deposits.
+      responses:
+        '200': { description: Micro-deposits verified. }
+  /accounts/{accountID}/cards:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    post:
+      operationId: linkCard
+      tags: [Cards]
+      summary: Link a card.
+      responses:
+        '200': { description: The linked card. }
+    get:
+      operationId: listCards
+      tags: [Cards]
+      summary: List cards.
+      responses:
+        '200': { description: A list of cards. }
+  /accounts/{accountID}/cards/{cardID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - name: cardID
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getCard
+      tags: [Cards]
+      summary: Retrieve a card.
+      responses:
+        '200': { description: The card. }
+    patch:
+      operationId: updateCard
+      tags: [Cards]
+      summary: Update a card.
+      responses:
+        '200': { description: The updated card. }
+    delete:
+      operationId: disableCard
+      tags: [Cards]
+      summary: Disable a card.
+      responses:
+        '204': { description: Card disabled. }
+  /accounts/{accountID}/wallets:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    post:
+      operationId: createWallet
+      tags: [Wallets]
+      summary: Create a wallet.
+      responses:
+        '200': { description: The created wallet. }
+    get:
+      operationId: listWallets
+      tags: [Wallets]
+      summary: List wallets.
+      responses:
+        '200': { description: A list of wallets. }
+  /accounts/{accountID}/wallets/{walletID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/walletID'
+    get:
+      operationId: getWallet
+      tags: [Wallets]
+      summary: Retrieve a wallet.
+      responses:
+        '200': { description: The wallet. }
+    patch:
+      operationId: updateWallet
+      tags: [Wallets]
+      summary: Update a wallet.
+      responses:
+        '200': { description: The updated wallet. }
+  /accounts/{accountID}/wallets/{walletID}/transactions:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/walletID'
+    get:
+      operationId: listWalletTransactions
+      tags: [Wallets]
+      summary: List wallet transactions.
+      responses:
+        '200': { description: A list of wallet transactions. }
+  /accounts/{accountID}/wallets/{walletID}/transactions/{transactionID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/walletID'
+      - name: transactionID
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getWalletTransaction
+      tags: [Wallets]
+      summary: Retrieve a wallet transaction.
+      responses:
+        '200': { description: The wallet transaction. }
+  /accounts/{accountID}/adjustments:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    get:
+      operationId: listAdjustments
+      tags: [Wallets]
+      summary: List balance adjustments.
+      responses:
+        '200': { description: A list of adjustments. }
+  /accounts/{accountID}/adjustments/{adjustmentID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - name: adjustmentID
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getAdjustment
+      tags: [Wallets]
+      summary: Retrieve a balance adjustment.
+      responses:
+        '200': { description: The adjustment. }
+  /accounts/{accountID}/payment-methods:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    get:
+      operationId: listPaymentMethods
+      tags: [Payment Methods]
+      summary: List payment methods.
+      responses:
+        '200': { description: A list of payment methods. }
+  /accounts/{accountID}/payment-methods/{paymentMethodID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - name: paymentMethodID
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getPaymentMethod
+      tags: [Payment Methods]
+      summary: Retrieve a payment method.
+      responses:
+        '200': { description: The payment method. }
+  /accounts/{accountID}/transfers:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    post:
+      operationId: createTransfer
+      tags: [Transfers]
+      summary: Create a transfer.
+      responses:
+        '200': { description: The created transfer. }
+    get:
+      operationId: listTransfers
+      tags: [Transfers]
+      summary: List transfers.
+      responses:
+        '200': { description: A list of transfers. }
+  /accounts/{accountID}/transfers/{transferID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/transferID'
+    get:
+      operationId: getTransfer
+      tags: [Transfers]
+      summary: Retrieve a transfer.
+      responses:
+        '200': { description: The transfer. }
+    patch:
+      operationId: updateTransferMetadata
+      tags: [Transfers]
+      summary: Update transfer metadata.
+      responses:
+        '200': { description: The updated transfer. }
+  /accounts/{accountID}/transfer-options:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    post:
+      operationId: createTransferOptions
+      tags: [Transfers]
+      summary: Retrieve available transfer options.
+      responses:
+        '200': { description: The available transfer options. }
+  /accounts/{accountID}/transfer-config:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    post:
+      operationId: createTransferConfig
+      tags: [Transfers]
+      summary: Create transfer configuration.
+      responses:
+        '200': { description: The created transfer configuration. }
+    get:
+      operationId: getTransferConfig
+      tags: [Transfers]
+      summary: Get transfer configuration.
+      responses:
+        '200': { description: The transfer configuration. }
+    put:
+      operationId: updateTransferConfig
+      tags: [Transfers]
+      summary: Update transfer configuration.
+      responses:
+        '200': { description: The updated transfer configuration. }
+  /accounts/{accountID}/transfers/{transferID}/cancellations:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/transferID'
+    post:
+      operationId: cancelTransfer
+      tags: [Transfers]
+      summary: Cancel a transfer.
+      responses:
+        '200': { description: The cancellation. }
+  /accounts/{accountID}/transfers/{transferID}/cancellations/{cancellationID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/transferID'
+      - name: cancellationID
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getCancellation
+      tags: [Transfers]
+      summary: Get cancellation details.
+      responses:
+        '200': { description: The cancellation. }
+  /accounts/{accountID}/transfers/{transferID}/refunds:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/transferID'
+    post:
+      operationId: createRefund
+      tags: [Refunds]
+      summary: Create a refund.
+      responses:
+        '200': { description: The created refund. }
+    get:
+      operationId: listRefunds
+      tags: [Refunds]
+      summary: List refunds.
+      responses:
+        '200': { description: A list of refunds. }
+  /accounts/{accountID}/transfers/{transferID}/refunds/{refundID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/transferID'
+      - name: refundID
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getRefund
+      tags: [Refunds]
+      summary: Retrieve a refund.
+      responses:
+        '200': { description: The refund. }
+  /accounts/{accountID}/transfers/{transferID}/reversals:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/transferID'
+    post:
+      operationId: createReversal
+      tags: [Refunds]
+      summary: Cancel or refund a card transfer (reversal).
+      responses:
+        '200': { description: The reversal. }
+  /accounts/{accountID}/sweep-configs:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    post:
+      operationId: createSweepConfig
+      tags: [Sweeps]
+      summary: Create a sweep configuration.
+      responses:
+        '200': { description: The created sweep configuration. }
+    get:
+      operationId: listSweepConfigs
+      tags: [Sweeps]
+      summary: List sweep configurations.
+      responses:
+        '200': { description: A list of sweep configurations. }
+  /accounts/{accountID}/sweep-configs/{sweepConfigID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - name: sweepConfigID
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getSweepConfig
+      tags: [Sweeps]
+      summary: Retrieve a sweep configuration.
+      responses:
+        '200': { description: The sweep configuration. }
+    patch:
+      operationId: updateSweepConfig
+      tags: [Sweeps]
+      summary: Update a sweep configuration.
+      responses:
+        '200': { description: The updated sweep configuration. }
+  /accounts/{accountID}/wallets/{walletID}/sweeps:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/walletID'
+    get:
+      operationId: listSweeps
+      tags: [Sweeps]
+      summary: List sweeps for a wallet.
+      responses:
+        '200': { description: A list of sweeps. }
+  /accounts/{accountID}/wallets/{walletID}/sweeps/{sweepID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/walletID'
+      - name: sweepID
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getSweep
+      tags: [Sweeps]
+      summary: Retrieve a sweep.
+      responses:
+        '200': { description: The sweep. }
+  /accounts/{accountID}/disputes:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    get:
+      operationId: listDisputes
+      tags: [Disputes]
+      summary: List disputes.
+      responses:
+        '200': { description: A list of disputes. }
+  /accounts/{accountID}/disputes/{disputeID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/disputeID'
+    get:
+      operationId: getDispute
+      tags: [Disputes]
+      summary: Retrieve a dispute.
+      responses:
+        '200': { description: The dispute. }
+  /accounts/{accountID}/disputes/{disputeID}/accept:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/disputeID'
+    post:
+      operationId: acceptDispute
+      tags: [Disputes]
+      summary: Accept a dispute.
+      responses:
+        '200': { description: The accepted dispute. }
+  /accounts/{accountID}/disputes/{disputeID}/evidence-file:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/disputeID'
+    post:
+      operationId: uploadDisputeEvidenceFile
+      tags: [Disputes]
+      summary: Upload dispute evidence file.
+      responses:
+        '200': { description: The uploaded evidence. }
+  /accounts/{accountID}/disputes/{disputeID}/evidence-text:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/disputeID'
+    post:
+      operationId: uploadDisputeEvidenceText
+      tags: [Disputes]
+      summary: Upload dispute evidence text.
+      responses:
+        '200': { description: The uploaded evidence. }
+  /accounts/{accountID}/disputes/{disputeID}/evidence/submit:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/disputeID'
+    post:
+      operationId: submitDisputeEvidence
+      tags: [Disputes]
+      summary: Submit dispute evidence.
+      responses:
+        '200': { description: Evidence submitted. }
+  /accounts/{accountID}/disputes/{disputeID}/evidence:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/disputeID'
+    get:
+      operationId: listDisputeEvidence
+      tags: [Disputes]
+      summary: List dispute evidence.
+      responses:
+        '200': { description: A list of evidence. }
+  /accounts/{accountID}/disputes/{disputeID}/evidence/{evidenceID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/disputeID'
+      - $ref: '#/components/parameters/evidenceID'
+    get:
+      operationId: getDisputeEvidence
+      tags: [Disputes]
+      summary: Retrieve dispute evidence.
+      responses:
+        '200': { description: The evidence. }
+    patch:
+      operationId: updateDisputeEvidence
+      tags: [Disputes]
+      summary: Update dispute evidence.
+      responses:
+        '200': { description: The updated evidence. }
+    delete:
+      operationId: deleteDisputeEvidence
+      tags: [Disputes]
+      summary: Delete dispute evidence.
+      responses:
+        '204': { description: Evidence deleted. }
+  /accounts/{accountID}/disputes/{disputeID}/evidence/{evidenceID}/data:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/disputeID'
+      - $ref: '#/components/parameters/evidenceID'
+    get:
+      operationId: getDisputeEvidenceData
+      tags: [Disputes]
+      summary: Retrieve dispute evidence data.
+      responses:
+        '200': { description: The evidence file data. }
+  /issuing/{accountID}/cards:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    post:
+      operationId: createIssuedCard
+      tags: [Card Issuing]
+      summary: Create a spending card.
+      responses:
+        '200': { description: The created spending card. }
+    get:
+      operationId: listIssuedCards
+      tags: [Card Issuing]
+      summary: List spending cards.
+      responses:
+        '200': { description: A list of spending cards. }
+  /issuing/{accountID}/cards/{issuedCardID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/issuedCardID'
+    get:
+      operationId: getIssuedCard
+      tags: [Card Issuing]
+      summary: Retrieve a spending card.
+      responses:
+        '200': { description: The spending card. }
+    patch:
+      operationId: updateIssuedCard
+      tags: [Card Issuing]
+      summary: Update a spending card.
+      responses:
+        '200': { description: The updated spending card. }
+  /issuing/{accountID}/cards/{issuedCardID}/details:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - $ref: '#/components/parameters/issuedCardID'
+    get:
+      operationId: getIssuedCardDetails
+      tags: [Card Issuing]
+      summary: Get PCI details for a spending card.
+      responses:
+        '200': { description: The full PCI card details. }
+  /issuing/{accountID}/authorizations:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    get:
+      operationId: listAuthorizations
+      tags: [Card Issuing]
+      summary: List authorizations.
+      responses:
+        '200': { description: A list of authorizations. }
+  /issuing/{accountID}/authorizations/{authorizationID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - name: authorizationID
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getAuthorization
+      tags: [Card Issuing]
+      summary: Retrieve an authorization.
+      responses:
+        '200': { description: The authorization. }
+  /issuing/{accountID}/authorizations/{authorizationID}/events:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - name: authorizationID
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: listAuthorizationEvents
+      tags: [Card Issuing]
+      summary: List authorization events.
+      responses:
+        '200': { description: A list of authorization events. }
+  /issuing/{accountID}/card-transactions:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+    get:
+      operationId: listCardTransactions
+      tags: [Card Issuing]
+      summary: List card transactions.
+      responses:
+        '200': { description: A list of card transactions. }
+  /issuing/{accountID}/card-transactions/{cardTransactionID}:
+    parameters:
+      - $ref: '#/components/parameters/accountID'
+      - name: cardTransactionID
+        in: path
+        required: true
+        schema: { type: string }
+    get:
+      operationId: getCardTransaction
+      tags: [Card Issuing]
+      summary: Retrieve a card transaction.
+      responses:
+        '200': { description: The card transaction. }
+  /institutions:
+    get:
+      operationId: getInstitutions
+      tags: [Institutions]
+      summary: Look up financial institutions.
+      description: >-
+        Validate a financial institution before initiating payment activity, or
+        check which payment rails are available for a given routing number.
+      parameters:
+        - name: routingNumber
+          in: query
+          schema: { type: string }
+          description: The ABA routing number to look up.
+        - name: name
+          in: query
+          schema: { type: string }
+          description: Filter by institution name.
+      responses:
+        '200': { description: Matching institutions and supported rails. }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 access token passed as a Bearer token.
+  parameters:
+    accountID:
+      name: accountID
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: The Moov account identifier.
+    representativeID:
+      name: representativeID
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    bankAccountID:
+      name: bankAccountID
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    walletID:
+      name: walletID
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    transferID:
+      name: transferID
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    disputeID:
+      name: disputeID
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    evidenceID:
+      name: evidenceID
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    issuedCardID:
+      name: issuedCardID
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
